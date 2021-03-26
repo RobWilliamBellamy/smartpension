@@ -46,9 +46,12 @@ const processWebServerLog = (new_state, data) => {
     // Sort page view records.    
     const page_views = new_state.page_views;
     const page_keys = Object.keys(page_views);    
-    
+
     new_state.page_views_sorted_keys = page_keys.sort((a, b) => {               
-        return (page_views[a].views > page_views[b].views) ? -1 : 1;        
+        
+        const av = page_views[a].views;
+        const bv = page_views[b].views;        
+        return (av < bv) ? 1 : (av > bv) ? -1 : 0;     
     });
 
     // Determine unique page views.
@@ -59,18 +62,13 @@ const processWebServerLog = (new_state, data) => {
     }
 
     const unique_views = new_state.unique_views;
-    new_state.unique_views_sorted_keys = page_keys.sort((a, b) => {               
+    new_state.unique_views_sorted_keys = Object.keys(page_views).sort((a, b) => {               
         
         const au = unique_views[a];
         const bu = unique_views[b];
-
-        if (au > bu) { return -1 }
-        else if (au < bu) { return 1 }
-        else { 
-            return (a > b) ? 1 : -1;
-        }      
+        return (au < bu) ? 1 : (au > bu) ? -1 : 0;       
     });
-
+        
     return new_state;
 };
 

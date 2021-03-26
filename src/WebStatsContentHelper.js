@@ -1,4 +1,6 @@
-import { Table } from 'semantic-ui-react';
+import { Statistic, Grid, Segment, Table, Divider } from 'semantic-ui-react';
+
+import { VictoryPie, VictoryTheme } from 'victory';
 
 /**
  * renderTable.
@@ -111,6 +113,32 @@ const renderFooter = (name, cols) => {
     return footer;
 }
 
+/**
+ * renderChart
+ * @returns chart
+ */
+const renderChart = (props) => {
+
+    return (<Segment>
+                <Grid columns={2} centred>
+                    <Grid.Row centred textAlign='center'>            
+                        <Grid.Column width={4}>
+                            <VictoryPie theme={ VictoryTheme.material }                  
+                                        data={ props.data } /> 
+                        </Grid.Column>
+                        <Grid.Column width={12} verticalAlign='middle'>
+                            <Statistic>
+                                <Statistic.Value>{ props.total }</Statistic.Value>
+                                <Statistic.Label>{ props.title }</Statistic.Label>
+                            </Statistic>  
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid> 
+                <Divider vertical />
+            </Segment>);  
+}
+
 export {
-    renderTable,    
+    renderTable,  
+    renderChart
 }
