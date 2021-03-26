@@ -82,7 +82,7 @@ function App() {
             <Segment>
                 <Header>
                     <Image src='logo.png' size='large' floated='left'/>
-                    Smart Pensions                   
+                    Smart Pension                   
                     <Header.Subheader><b>Title:</b> FE Engineer Test</Header.Subheader>
                     <Header.Subheader><b>Author:</b> R.Bellamy</Header.Subheader>
                 </Header>
