@@ -20,6 +20,7 @@ const processWebServerLog = (new_state, data) => {
     // Parse the log file to seperate rows and columns.
     const record_rows = data.split('\n');
     const temp_data = [];
+    const temp_users = [];
 
     record_rows.forEach((rr, i) => {
         
@@ -41,6 +42,11 @@ const processWebServerLog = (new_state, data) => {
                 views: 1, 
                 unique: [ip_address]
             }; 
+
+            // Record overall unique users.
+            if (temp_users.indexOf(ip_address) === -1) {
+                temp_users.push(ip_address);
+            }
         }
     });   
 
@@ -63,8 +69,18 @@ const processWebServerLog = (new_state, data) => {
     unique_views.views_total = calculateTotalViews(unique_views.key_values);
 
     // Add stats.
-    page_views.stats = [{ label: 'Total Page Views', val: page_views.views_total }];
-    unique_views.stats = [{ label: 'Total Unique Views', val: unique_views.views_total }];
+    page_views.stats = [{ label: 'Total Page Views', 
+                          val: page_views.views_total,
+                          icon: 'eye' }, 
+                        { label: 'Total Pages', 
+                          val: Object.keys(temp_data).length,
+                          icon: 'sitemap' }];
+    unique_views.stats = [{ label: 'Total Unique Views', 
+                            val: unique_views.views_total,
+                            icon: 'eye' },
+                          { label: 'Total Unique Users', 
+                            val: temp_users.length,
+                            icon: 'user' }];
 
     return new_state;
 };

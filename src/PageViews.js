@@ -29,17 +29,17 @@ const PageViews = (props) => {
                                 footer={[ 'Total:', page.views_total ]} />
 
                 <Segment>
-                        <Grid columns={2} centred>
-                                <Grid.Row centred>                                            
+                        <Grid columns={3}>
+                                <Grid.Row>                                            
                                         <Grid.Column width={4}>
                                                 <PageViewsChart data={ page.key_values } />
-                                        </Grid.Column>
-                                        <Grid.Column width={12} verticalAlign='middle'>
-                                                <PageViewsStatistics data={ page.stats } />
+                                        </Grid.Column>  
+                                        <Grid.Column width={2}></Grid.Column>                                      
+                                        <Grid.Column width={10} verticalAlign='middle'>
+                                                <PageViewsStatistics data={ page.stats } />                                                
                                         </Grid.Column>
                                 </Grid.Row>
                         </Grid> 
-                        <Divider vertical />
                 </Segment>               
             </div>);
 };
