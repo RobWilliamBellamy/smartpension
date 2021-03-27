@@ -1,81 +1,76 @@
-import React, { useEffect, useReducer, createContext } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
 import { Tab, Segment, Header, Image } from 'semantic-ui-react';
 
-import { loadFile } from './FileLoader';
-import { webStatsReducer }  from './WebStatsReducer';
-import WebPageViews from './WebPageViews';
-import WebPageUniqueViews from './WebPageUniqueViews';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 
+import { loadFile } from './FileLoader';
+import { pageViewsReducer }  from './PageViewsReducer';
+import PageViews from './PageViews';
 
 import { config } from './configs/config';
-import { initial_state } from './configs/store.js';
 
 import './css/App.css';
 import 'semantic-ui-css/semantic.min.css';
 
-// Create context to share state.
-export const WebStatsContext = createContext();
-
-function App() {
+/**
+ * defineTabs
+ * @param {*} state 
+ * @returns tabs
+ */
+ const defineTabs = (state) => {
     
-    const [state, dispatch] = useReducer( webStatsReducer, initial_state );
+    let panes = [];    
+    state.forEach((page, i) => {
+        
+        const tab = page.tab;
+        panes.push({
+            menuItem: {
+                as: NavLink,
+                id: tab.id,
+                content: tab.content,
+                to: tab.path,
+                exact: true,
+                key: page.id
+            },
+            pane: (
+                <Route path={ tab.path }
+                       key={ tab.id }
+                       exact                   
+                       render={() => (
+                            <Tab.Pane>
+                                <PageViews index={ i }/>
+                            </Tab.Pane>
+                       )}
+                />)
+        });
+    });
+
+    return panes;
+};
+
+/**
+ * App.
+ * @returns app
+ */
+const App =() => {
+        
+    // Create Redux store.
+    const store = createStore(pageViewsReducer);
 
     // Load the web server log file from disk.
     useEffect(() => {
 
         loadFile(config.web_server_log_file_path)
         .then((file) => {
-            dispatch({ type: 'PROCESS_WEB_SERVER_LOG', data: file });
+            store.dispatch({ type: 'PROCESS_WEB_SERVER_LOG', data: file });
         })
         .catch(err => {
-            console.log('Error loading data');
+            console.log('Error loading data', err);
         });
 
     }, []);
-    
-    // Define tab panes.    
-    const panes = [
-    {
-        menuItem: {
-            as: NavLink,
-            id: "pageviews",
-            content: "Views",
-            to: "/pageviews",
-            exact: true,
-            key: "pageviews"
-        },
-        pane: (
-            <Route path="/pageviews"
-                   key='pageviews'
-                   exact                   
-                   render={() => (
-                        <Tab.Pane>
-                            <WebPageViews />
-                        </Tab.Pane>
-                   )}
-            />)
-    },
-    {
-        menuItem: {
-            as: NavLink,
-            id: "unique",
-            content: "Unique Page Views",
-            to: "/uniquepageviews",
-            exact: true,
-            key: "uniquepageviews"
-        },
-        pane: (
-            <Route path="/uniquepageviews"
-                   key='uniquepageviews'
-                   exact                   
-                   render={() => (
-                        <Tab.Pane>                        
-                            <WebPageUniqueViews />
-                        </Tab.Pane>
-                    )}
-            />)
-    }];
 
     return (
         <Segment>
@@ -87,16 +82,16 @@ function App() {
                     <Header.Subheader><b>Author:</b> R.Bellamy</Header.Subheader>
                 </Header>
             </Segment>
-            <WebStatsContext.Provider value={ [ state, dispatch ] }>
+            <Provider store={ store }>
                 <BrowserRouter>
                     <Switch>
                         <Tab key='menu' menu={ { tabular: true, className: 'topmenu' } }                             
-                             renderActiveOnly={ false } panes={ panes } />                                  
+                             renderActiveOnly={ false } panes={ defineTabs(store.getState()) } />                                  
                     </Switch>            
                 </BrowserRouter>
-            </WebStatsContext.Provider>
+            </Provider>
         </Segment>
     );
-}
+};
 
 export default App;
