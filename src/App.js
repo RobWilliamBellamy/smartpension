@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
 import { Tab, Segment, Header, Image } from 'semantic-ui-react';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
-import { loadFile } from './FileLoader';
+import FileLoader from './FileLoader';
 import { pageViewsReducer }  from './PageViewsReducer';
 import PageViews from './PageViews';
 
@@ -54,44 +54,33 @@ import 'semantic-ui-css/semantic.min.css';
  * App.
  * @returns app
  */
-const App =() => {
+const App = () => {
         
     // Create Redux store.
     const store = createStore(pageViewsReducer);
 
-    // Load the web server log file from disk.
-    useEffect(() => {
-
-        loadFile(config.web_server_log_file_path)
-        .then((file) => {
-            store.dispatch({ type: 'PROCESS_WEB_SERVER_LOG', data: file });
-        })
-        .catch(err => {
-            console.log('Error loading data', err);
-        });
-
-    }, []);
-
-    return (
-        <Segment>
-            <Segment>
-                <Header>
-                    <Image src='logo.png' size='large' floated='left'/>
-                    Smart Pension                   
-                    <Header.Subheader><b>Title:</b> FE Engineer Test</Header.Subheader>
-                    <Header.Subheader><b>Author:</b> R.Bellamy</Header.Subheader>
-                </Header>
-            </Segment>
-            <Provider store={ store }>
-                <BrowserRouter>
-                    <Switch>
-                        <Tab key='menu' menu={ { tabular: true, className: 'topmenu' } }                             
-                             renderActiveOnly={ false } panes={ defineTabs(store.getState()) } />                                  
-                    </Switch>            
-                </BrowserRouter>
-            </Provider>
-        </Segment>
-    );
+    return (<Segment>            
+                <Segment>
+                    <Header>
+                        <Image src='logo.png' size='large' floated='left'/>
+                        Smart Pension                   
+                        <Header.Subheader><b>Title:</b> FE Engineer Test</Header.Subheader>
+                        <Header.Subheader><b>Author:</b> R.Bellamy</Header.Subheader>
+                    </Header>
+                </Segment>
+                <Provider store={ store }>    
+                    <FileLoader default={ config.web_server_log_file_path } />                  
+                    <BrowserRouter>
+                        <Switch>
+                            <Tab key='menu' 
+                                menu={ { tabular: true, 
+                                        className: 'topmenu' } }                             
+                                renderActiveOnly={ false } 
+                                panes={ defineTabs(store.getState()) } />                                  
+                        </Switch>            
+                    </BrowserRouter>
+                </Provider>
+            </Segment>);
 };
 
 export default App;
