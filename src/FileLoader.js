@@ -4,6 +4,11 @@ import { connect } from 'react-redux';
 
 import { useFilePicker } from 'use-file-picker';
 
+/**
+ * Load a file from the given path as a promise.
+ * @param {*} path 
+ * @returns 
+ */
 export const loadFile = (path) => {
 
     return new Promise((resolve, reject) => {
@@ -30,6 +35,11 @@ const FileLoader = (props) => {
     const [filesContent, errors, openFileSelector, loading] = useFilePicker({
         multiple: true, accept: [".log"]
     });
+
+    // Check for file load errors.
+    if (errors.length > 0) {
+        throw new Error(errors);
+    }
 
     // Load selected file.
     const loadSelected = () => {

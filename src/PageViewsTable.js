@@ -109,7 +109,7 @@ const renderFooter = (name, cols) => {
         
         footer.push(            
             <Table.HeaderCell key={ `footer_${name}_${i}` }>
-                { cols[i] }</Table.HeaderCell>
+                <b>{ cols[i] }</b></Table.HeaderCell>
         );
     }
 

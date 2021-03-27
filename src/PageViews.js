@@ -1,4 +1,4 @@
-import { Icon, Segment, Grid, Divider } from 'semantic-ui-react';
+import { Icon, Segment, Grid } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
 import PageViewsTable from './PageViewsTable';
