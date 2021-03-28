@@ -1,5 +1,4 @@
 import { initial_state } from './configs/store.js';
-import { config } from './configs/config.js';
 
 // PageViewsReducer, react to actions and modify state.
 const pageViewsReducer = (state = initial_state , action) => {

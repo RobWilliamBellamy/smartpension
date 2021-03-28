@@ -13,6 +13,6 @@ describe('Test React App', () => {
     });
     it("Renders the correct number of tabs", () => {
          const wrapper = mount(<App />);
-         expect(wrapper.find(".rover-container").length).toEqual(initial_state.length);
+         expect(wrapper.find(".topmenu").length).toEqual(initial_state.length);
     });
 });

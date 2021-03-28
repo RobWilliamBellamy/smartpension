@@ -36,11 +36,13 @@ const PageViews = (props) => {
                     <Grid columns={3}>
                         <Grid.Row>                                            
                             <Grid.Column width={4}>
-                                <PageViewsChart data={ page.key_values } />
+                                <PageViewsChart name={ page.tab.id } 
+												data={ page.key_values } />
                             </Grid.Column>  
                             <Grid.Column width={2}></Grid.Column>                                      
                             <Grid.Column width={10} verticalAlign='middle'>
-                            	<PageViewsStatistics data={ page.stats } />                                                
+                            	<PageViewsStatistics name={ page.tab.id } 
+													 data={ page.stats } />                                                
                             </Grid.Column>
                         </Grid.Row>
                     </Grid> 

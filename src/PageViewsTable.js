@@ -14,13 +14,13 @@ const PageViewsTable = (props) => {
                     { renderTableHeaders(props.name, props.cols) }
                 </Table.Row>
             </Table.Header>
-        <Table.Body>
-            { renderTableRows(props.name, props.data) }            
-        </Table.Body>
-        <Table.Footer>
-        <Table.Row>
-            { renderFooter(props.name, props.footer) }
-        </Table.Row>
+            <Table.Body>
+                { renderTableRows(props.name, props.data) }            
+            </Table.Body>
+            <Table.Footer>
+            <Table.Row>
+                { renderFooter(props.name, props.footer) }
+            </Table.Row>
         </Table.Footer>
     </Table>);
 };
@@ -36,11 +36,12 @@ const renderTableHeaders = (name, cols) => {
     let headers = [];
     for (const col of cols) {
 
-        if (col.sort) {
-                        
+        const key = `header_${name}_${col.text}`;
+        if (col.sort) {            
+            
             headers.push(  
                 <Table.HeaderCell
-                    key={ `header_${name}_${col.text}` }
+                    key={ key }
                     sorted={ (col.desc) ? 'descending' : 'ascending' }
                     onClick={() => col.sort() } >
                     { col.text }
@@ -48,7 +49,7 @@ const renderTableHeaders = (name, cols) => {
             );
         } 
         else {
-            headers.push(<Table.HeaderCell>{ col.text }</Table.HeaderCell>);
+            headers.push(<Table.HeaderCell key={key}>{ col.text }</Table.HeaderCell>);
         }
     }
 

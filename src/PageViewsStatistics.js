@@ -7,7 +7,8 @@ import { Statistic, Icon } from 'semantic-ui-react';
  */
  const PageViewsStatistics = (props) => {
 
-    return (<Statistic.Group widths='two'
+    return (<Statistic.Group name={ `statistics_${props.name}` }
+                             widths='two'
                              size='small'>
                 { renderStatistics(props.data) }
             </Statistic.Group>);  
@@ -24,7 +25,7 @@ const renderStatistics = (stats) => {
     for (const key in stats) {
         
         const stat = stats[key];
-        stat_entries.push(<Statistic key={ `stat_${ stat.label }`} 
+        stat_entries.push(<Statistic key={ `stat_${stat.label}`} 
                                      floated='left'
                                      horizontal>
                             <Statistic.Value>

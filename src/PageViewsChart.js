@@ -12,7 +12,8 @@ import { VictoryPie, VictoryTheme } from 'victory';
        return { x: i, y: props.data[k], label: k };
     });
 
-    return (<VictoryPie theme={ VictoryTheme.material }                  
+    return (<VictoryPie key={ `chart_${ props.name}` }
+                        theme={ VictoryTheme.material }                  
                         data={ chart_data } />);  
 }
 
