@@ -1,4 +1,5 @@
 import { initial_state } from './configs/store.js';
+import { config } from './configs/config.js';
 
 // PageViewsReducer, react to actions and modify state.
 const pageViewsReducer = (state = initial_state , action) => {
@@ -6,7 +7,7 @@ const pageViewsReducer = (state = initial_state , action) => {
     let new_state = { ...state };
     switch (action.type) {
         case 'PROCESS_WEB_SERVER_LOG':             
-            return processWebServerLog(new_state, action.data);
+            return parseLog(new_state, action.data);
         case 'SORT_BY_VIEWS':            
             return sortByViewCount(new_state, action.data);  
         default:
@@ -15,40 +16,45 @@ const pageViewsReducer = (state = initial_state , action) => {
 };
 
 // Process the web server log.
-const processWebServerLog = (new_state, data) => {
-        
-    // Parse the log file to seperate rows and columns.
-    const record_rows = data.split('\n');
+const parseLog = (new_state, data) => {
+
     const temp_data = [];
     const temp_users = [];
 
-    record_rows.forEach((rr, i) => {
+    try {
+        // Parse the log file to seperate rows and columns.    
+        const record_rows = data.split('\n');
+        record_rows.forEach((rr, i) => {
         
-        // Record web log as JSON.
-        if (rr && rr.length > 0) {
-            
-            const record_set = rr.split(' ');
-            const page = record_set[0];
-            const ip_address = record_set[1];
-
-            // Record overall page views and unique views.
-            let existing_page = temp_data[page];  
-            temp_data[page] = (existing_page) ?                 
-            { 
-                views: ++existing_page.views, 
-                unique: updateUniqueCount(existing_page.unique, ip_address)
-            } : 
-            { 
-                views: 1, 
-                unique: [ip_address]
-            }; 
-
-            // Record overall unique users.
-            if (temp_users.indexOf(ip_address) === -1) {
-                temp_users.push(ip_address);
+            // Record web log as JSON.
+            if (rr && rr.length > 0) {            
+                
+                const record_set = rr.split(' ');
+                const page = record_set[0];
+                const ip_address = record_set[1];
+    
+                // Record overall page views and unique views.
+                let existing_page = temp_data[page];  
+                temp_data[page] = (existing_page) ?                 
+                { 
+                    views: ++existing_page.views, 
+                    unique: updateUniqueCount(existing_page.unique, ip_address)
+                } : 
+                { 
+                    views: 1, 
+                    unique: [ip_address]
+                }; 
+    
+                // Record overall unique users.
+                if (temp_users.indexOf(ip_address) === -1) {
+                    temp_users.push(ip_address);
+                }
             }
-        }
-    });   
+        }); 
+    }
+    catch (err) {
+        throw new Error(config.errors.file_parse_error);
+    }      
 
     // Short-hand references.
     const page_views = new_state[0];
@@ -61,8 +67,8 @@ const processWebServerLog = (new_state, data) => {
     });
     
     // Perform initial data sort.
-    page_views.key_values = sortViewData(page_views.key_values, page_views.sort_desc);
-    unique_views.key_values = sortViewData(unique_views.key_values, page_views.sort_desc);
+    page_views.key_values = sortData(page_views.key_values, page_views.sort_desc);
+    unique_views.key_values = sortData(unique_views.key_values, page_views.sort_desc);
     
     // Calculate view totals.
     page_views.views_total = calculateTotalViews(page_views.key_values);    
@@ -85,10 +91,10 @@ const updateUniqueCount = (unique, ip_address) => {
 };
 
 // Sort view data.
-const sortViewData = (data, desc) => {
+const sortData = (data, desc) => {
 
     let tuples = [];
-    for (var key in data) tuples.push([key, data[key]]);
+    for (const key in data) tuples.push([key, data[key]]);
 
     tuples.sort((a, b) => {
         a = a[1];
@@ -105,7 +111,7 @@ const sortViewData = (data, desc) => {
     for (var i = 0; i < tuples.length; i++) {    
         sorted_data[tuples[i][0]] = tuples[i][1];
     }
-
+    
     return sorted_data;
 };
 
@@ -124,12 +130,13 @@ const sortByViewCount = (new_state, index) => {
     let sort_desc = !page.sort_desc;
 
     page.sort_desc = sort_desc;
-    page.key_values = sortViewData(page.key_values, sort_desc);
+    page.key_values = sortData(page.key_values, sort_desc);
     
     return new_state;
 };
 
 export {
     pageViewsReducer, 
-    processWebServerLog,  
+    parseLog,
+    sortData
 };

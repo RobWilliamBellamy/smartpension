@@ -8,5 +8,8 @@ export const config = {
         placeHolder: 'Please select a web log file...',
         title: 'Upload Web Log',
         content: 'Please select a web log file to upload or use the default file from this project.'
+    },
+    errors: {
+        file_parse_error: 'Failed to parse web log file'
     }
 };
