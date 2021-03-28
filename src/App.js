@@ -1,13 +1,13 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route, NavLink } from 'react-router-dom';
-import { Tab, Segment, Header, Image } from 'semantic-ui-react';
+import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Segment, Header, Image } from 'semantic-ui-react';
 
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 
 import FileLoader from './FileLoader';
+import AppContent from './AppContent';
 import { pageViewsReducer }  from './PageViewsReducer';
-import PageViews from './PageViews';
 
 import { config } from './configs/config';
 
@@ -15,58 +15,36 @@ import './css/App.css';
 import 'semantic-ui-css/semantic.min.css';
 
 /**
- * defineTabs
- * @param {*} state 
- * @returns tabs
- */
- const defineTabs = (state) => {
-    
-    let panes = [];    
-    state.forEach((page, i) => {
-        
-        const tab = page.tab;
-        panes.push({
-            menuItem: {
-                as: NavLink,
-                id: tab.id,
-                content: tab.content,
-                to: tab.path,
-                exact: true,
-                key: page.id
-            },
-            pane: (
-                <Route path={ tab.path }
-                       key={ tab.id }
-                       exact                   
-                       render={() => (
-                            <Tab.Pane>
-                                <PageViews index={ i }/>
-                            </Tab.Pane>
-                       )}
-                />)
-        });
-    });
-
-    return panes;
-};
-
-/**
- * App.
+ * App
  * @returns app
  */
-const App = () => {
-        
+const App = (props) => {
+    
     // Create Redux store.
-    const store = createStore(pageViewsReducer);
+    const store = createStore(pageViewsReducer);    
+    const [ showFileLoader, setShowFileLoader ] = useState(true);
 
-    // Handle file loaded.
+    let history = useHistory();
+
+    // Handle file loaded, force first tab to display.
     const onFileLoaded = (file) => {
         
         store.dispatch({ type: 'PROCESS_WEB_SERVER_LOG', data: file });
-    }
-
+        history.push('/pageviews');
+        setShowFileLoader(false);
+    };
+    
     return (<Segment>            
                 <Segment>
+                    <FileLoader open={ showFileLoader }
+                                default={ config.web_server_log_file_path }
+                                image={ '/logo.png' }
+                                handleFile={ onFileLoaded } 
+                                accept={ [".log"] }
+                                placeHolder='Please select a web log file...'
+                                title='Upload Web Log'
+                                content='Please select a web log file to upload 
+                                    or use the default file from this project.' />
                     <Header>
                         <Image src='logo.png' size='large' floated='left'/>
                         Smart Pension                   
@@ -75,26 +53,9 @@ const App = () => {
                     </Header>
                 </Segment>
                 <Provider store={ store }>    
-                    <FileLoader default={ config.web_server_log_file_path }
-                                image={ '/logo.png' }
-                                handleFile={ onFileLoaded } 
-                                accept={ [".log"] }
-                                placeHolder='Please select a web log file...'
-                                title='Upload Web Log'
-                                content='Please select a web log file to upload 
-                                    or use the default file from this project.'
-                     />                  
-                    <BrowserRouter>
-                        <Switch>
-                            <Tab key='menu' 
-                                menu={ { tabular: true, 
-                                        className: 'topmenu' } }                             
-                                renderActiveOnly={ false } 
-                                panes={ defineTabs(store.getState()) } />                                  
-                        </Switch>            
-                    </BrowserRouter>
+                    <AppContent />
                 </Provider>
             </Segment>);
-};
+}
 
 export default App;

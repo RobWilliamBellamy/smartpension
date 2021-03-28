@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { connect } from 'react-redux';
 import { Modal, Image, Button, Form } from 'semantic-ui-react';
 
 import { useFilePicker } from 'use-file-picker';
@@ -31,8 +30,8 @@ export const loadFile = (path) => {
  */
 const FileLoader = (props) => {
 
-    const [open, setOpen] = useState(true);
-    const [filesContent, errors, openFileSelector, loading] = useFilePicker({
+    const [ open, setOpen ] = useState(props.open);
+    const [ filesContent, errors, openFileSelector ] = useFilePicker({
         multiple: true, accept: props.accept
     });
 
@@ -104,4 +103,4 @@ const FileLoader = (props) => {
     );
 };
 
-export default connect()(FileLoader);
+export default FileLoader;

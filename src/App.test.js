@@ -1,8 +1,18 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { configure, shallow, mount } from "enzyme";
+import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+import App from './App';
+import { initial_state } from './configs/store.js';
+
+configure({ adapter: new Adapter() });
+
+describe('Test React App', () => {
+
+    it("Renders without crashing", () => {
+        shallow(<App />);
+    });
+    it("Renders the correct number of tabs", () => {
+         const wrapper = mount(<App />);
+         expect(wrapper.find(".rover-container").length).toEqual(initial_state.length);
+    });
 });
