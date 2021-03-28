@@ -1,4 +1,5 @@
 import { initial_state } from './configs/store.js';
+import { config } from './configs/config.js';
 
 // PageViewsReducer, react to actions and modify state.
 const pageViewsReducer = (state = initial_state , action) => {
@@ -69,18 +70,10 @@ const processWebServerLog = (new_state, data) => {
     unique_views.views_total = calculateTotalViews(unique_views.key_values);
 
     // Add stats.
-    page_views.stats = [{ label: 'Total Page Views', 
-                          val: page_views.views_total,
-                          icon: 'eye' }, 
-                        { label: 'Total Pages', 
-                          val: Object.keys(temp_data).length,
-                          icon: 'sitemap' }];
-    unique_views.stats = [{ label: 'Total Unique Views', 
-                            val: unique_views.views_total,
-                            icon: 'eye' },
-                          { label: 'Total Unique Users', 
-                            val: temp_users.length,
-                            icon: 'user' }];
+    page_views.stats.page_views.val = page_views.views_total;
+    page_views.stats.total_pages.val = Object.keys(temp_data).length;                          
+    unique_views.stats.unique_views.val = unique_views.views_total;
+    unique_views.stats.unique_users.val = temp_users.length;
 
     return new_state;
 };

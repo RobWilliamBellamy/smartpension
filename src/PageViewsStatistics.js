@@ -21,8 +21,10 @@ import { Statistic, Icon } from 'semantic-ui-react';
 const renderStatistics = (stats) => {
 
     const stat_entries = [];
-    stats.forEach((stat, i) => {
-        stat_entries.push(<Statistic key={ `stat_${i}`} 
+    for (const key in stats) {
+        
+        const stat = stats[key];
+        stat_entries.push(<Statistic key={ `stat_${ stat.label }`} 
                                      floated='left'
                                      horizontal>
                             <Statistic.Value>
@@ -30,7 +32,7 @@ const renderStatistics = (stats) => {
                                     &nbsp;{ stat.val }</Statistic.Value>
                             <Statistic.Label>{ stat.label }</Statistic.Label>
                          </Statistic>);
-    });
+    };
 
     return stat_entries;
 };
