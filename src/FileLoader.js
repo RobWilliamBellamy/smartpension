@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Modal, Image, Button, Form } from 'semantic-ui-react';
 import { connect } from 'react-redux';
+import { Modal, Image, Button, Form } from 'semantic-ui-react';
 
 import { useFilePicker } from 'use-file-picker';
 
@@ -33,11 +33,12 @@ const FileLoader = (props) => {
 
     const [open, setOpen] = useState(true);
     const [filesContent, errors, openFileSelector, loading] = useFilePicker({
-        multiple: true, accept: [".log"]
+        multiple: true, accept: props.accept
     });
 
     // Check for file load errors.
     if (errors.length > 0) {
+
         throw new Error(errors);
     }
 
@@ -45,7 +46,8 @@ const FileLoader = (props) => {
     const loadSelected = () => {
         
         if (filesContent.length > 0) {
-            props.dispatch({ type: 'PROCESS_WEB_SERVER_LOG', data: filesContent[0].content }) 
+           
+            props.handleFile(filesContent[0].content);
             setOpen(false);
         }        
     };
@@ -55,7 +57,8 @@ const FileLoader = (props) => {
         
         loadFile(props.default)
         .then((file) => {
-            props.dispatch({ type: 'PROCESS_WEB_SERVER_LOG', data: file });
+            
+            props.handleFile(file);
             setOpen(false);
         })
         .catch(err => {
@@ -68,25 +71,23 @@ const FileLoader = (props) => {
                onOpen={() => setOpen(true)}
                open={ open }
                centered={ false } >
-            <Modal.Header>Upload Web Log</Modal.Header>            
+            <Modal.Header>{ props.title }</Modal.Header>            
             <Modal.Content image>                                        
-                <Image size='medium' src='/logo.png' wrapped />
+                <Image size='medium' src={ props.image } wrapped />
                 <Modal.Description>                
-                    <p>Please select a web log file to upload or use the default
-                        file from this project.
-                    </p>
+                    <p>{ props.content }</p>
                     <Form>                          
                         <Form.Group>
                               <Form.Input label=''
                                           spellCheck={false}
                                           id="file"
-                                          placeholder="File Path"
+                                          placeholder={ props.placeHolder }
                                           value={ (filesContent.length > 0) ? 
                                                 filesContent[0].name : ''}
                                           width={16}
                               />
                          </Form.Group>
-                        <Form.Button onClick={() => openFileSelector() }>Select File</Form.Button>
+                        <Form.Button color='blue' onClick={() => openFileSelector() }>Select File</Form.Button>
                     </Form>                    
                 </Modal.Description> 
             </Modal.Content>

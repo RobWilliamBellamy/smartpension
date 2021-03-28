@@ -59,6 +59,12 @@ const App = () => {
     // Create Redux store.
     const store = createStore(pageViewsReducer);
 
+    // Handle file loaded.
+    const onFileLoaded = (file) => {
+        
+        store.dispatch({ type: 'PROCESS_WEB_SERVER_LOG', data: file });
+    }
+
     return (<Segment>            
                 <Segment>
                     <Header>
@@ -69,7 +75,15 @@ const App = () => {
                     </Header>
                 </Segment>
                 <Provider store={ store }>    
-                    <FileLoader default={ config.web_server_log_file_path } />                  
+                    <FileLoader default={ config.web_server_log_file_path }
+                                image={ '/logo.png' }
+                                handleFile={ onFileLoaded } 
+                                accept={ [".log"] }
+                                placeHolder='Please select a web log file...'
+                                title='Upload Web Log'
+                                content='Please select a web log file to upload 
+                                    or use the default file from this project.'
+                     />                  
                     <BrowserRouter>
                         <Switch>
                             <Tab key='menu' 
