@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import { Route, NavLink, useHistory } from 'react-router-dom';
 import { Tab } from 'semantic-ui-react';
 import { connect } from 'react-redux';
@@ -7,6 +7,8 @@ import PageViews from './PageViews';
 import FileLoader from './FileLoader';
 
 import { config } from './configs/config';
+import { PageType } from './types/PageType';
+import { AppContentPropsType } from './types/AppContentPropsType';
 
 import './css/App.css';
 import 'semantic-ui-css/semantic.min.css';
@@ -16,14 +18,14 @@ import 'semantic-ui-css/semantic.min.css';
  * @param {*} pages
  * @returns tabs
  */
- const defineTabs = (pages) => {
+ const defineTabs = (pages:Array<PageType>):Array<any> => {
         
-    let panes = [];    
-    for (const i in pages) {
-        
-        const page = pages[i];
-        const tab = page.tab;
-        
+    let panes:Array<any> = [];        
+    for(const i in pages) {
+
+        const page = pages[i];        
+        const tab = page.tab;  
+              
         panes.push({
             key: 'pane_' + i,
             menuItem: {
@@ -53,19 +55,19 @@ import 'semantic-ui-css/semantic.min.css';
  * AppContent.
  * @returns app content
  */
- const AppContent = (props) => {
+const AppContent = (props:AppContentPropsType) => {
 
     const [ tabIndex, setTabIndex ] = useState(0);
     const [ showFileLoader, setShowFileLoader ] = useState(true);
     let history = useHistory();
     
     // Handle tab changes.
-    const handleTabChange = (e, data) => {
+    const handleTabChange = (e:MouseEvent, data:any) => {
         setTabIndex(data.activeIndex);
     }; 
 
     // Handle file loaded, force first tab to display.
-    const onFileLoaded = (file) => {
+    const onFileLoaded = (file:string) => {
         
         props.dispatch({ type: 'PROCESS_WEB_SERVER_LOG', data: file });
         history.push(config.default_page);
@@ -74,13 +76,13 @@ import 'semantic-ui-css/semantic.min.css';
 
     return (<div> 
                 <FileLoader open={ showFileLoader }
-                    default={ config.file_loader.default }
-                    image={ config.file_loader.image }
-                    handleFile={ onFileLoaded } 
-                    accept={ config.file_loader.accept }
-                    placeHolder={ config.file_loader.placeHolder }
-                    title={ config.file_loader.title }
-                    content={ config.file_loader.content } />
+                            default={ config.file_loader.default }
+                            image={ config.file_loader.image }
+                            handleFile={ onFileLoaded } 
+                            accept={ config.file_loader.accept }
+                            placeHolder={ config.file_loader.placeHolder }
+                            title={ config.file_loader.title }
+                            content={ config.file_loader.content } />
                 <Tab key={ `tab_${tabIndex}` }
                      menu={ { tabular: true, 
                               className: 'topmenu' } }                             
@@ -96,7 +98,7 @@ import 'semantic-ui-css/semantic.min.css';
  * @param {*} state 
  * @returns 
  */
- const mapStateToProps = state => ({
+const mapStateToProps = (state:Array<PageType>) => ({
     pages: state
 });
 

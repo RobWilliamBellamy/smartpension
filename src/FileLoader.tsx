@@ -3,12 +3,14 @@ import { Modal, Image, Button, Form } from 'semantic-ui-react';
 
 import { useFilePicker } from 'use-file-picker';
 
+import { FileLoaderPropsType } from './types/FileLoaderPropsType';
+
 /**
  * Load a file from the given path as a promise.
  * @param {*} path 
  * @returns 
  */
-export const loadFile = (path) => {
+export const loadFile = (path:string) => {
 
     return new Promise((resolve, reject) => {
         
@@ -28,7 +30,7 @@ export const loadFile = (path) => {
  * @param {*} props 
  * @returns 
  */
-const FileLoader = (props) => {
+const FileLoader = (props:FileLoaderPropsType) => {
 
     const [ open, setOpen ] = useState(props.open);
     const [ filesContent, errors, openFileSelector ] = useFilePicker({
@@ -38,7 +40,7 @@ const FileLoader = (props) => {
     // Check for file load errors.
     if (errors.length > 0) {
 
-        throw new Error(errors);
+        throw new Error(errors.toString());
     }
 
     // Load selected file.
@@ -57,7 +59,7 @@ const FileLoader = (props) => {
         loadFile(props.default)
         .then((file) => {
             
-            props.handleFile(file);
+            props.handleFile(file as string);
             setOpen(false);
         })
         .catch(err => {

@@ -1,10 +1,13 @@
-import { initial_state } from './configs/store.js';
-import { config } from './configs/config.js';
+import { PageType, KeyValues } from './types/PageType';
+import { PageViewsReducerActionType } from './types/PageViewsReducerActionType';
+
+import initial_state  from './configs/store';
+import { config } from './configs/config';
 
 // PageViewsReducer, react to actions and modify state.
-const pageViewsReducer = (state = initial_state , action) => {
+const pageViewsReducer = (state:Array<PageType> = initial_state , action:PageViewsReducerActionType) => {
 
-    let new_state = { ...state };
+    let new_state = Object.assign({}, state);
     switch (action.type) {
         case 'PROCESS_WEB_SERVER_LOG':             
             return parseLog(new_state, action.data);
@@ -16,10 +19,18 @@ const pageViewsReducer = (state = initial_state , action) => {
 };
 
 // Process the web server log.
-const parseLog = (new_state, data) => {
+const parseLog = (new_state:Array<PageType>, data:string) => {
 
-    const temp_data = [];
-    const temp_users = [];
+    // Temp dictionary type.
+    interface IDictionary {
+        [key:string]: {
+            views:number,
+            unique:Array<string>
+        }
+    };
+
+    const temp_data:IDictionary = {};
+    const temp_users:Array<string> = [];
 
     try {
         // Parse the log file to seperate rows and columns.    
@@ -30,8 +41,8 @@ const parseLog = (new_state, data) => {
             if (rr && rr.length > 0) {            
                 
                 const record_set = rr.split(' ');
-                const page = record_set[0];
-                const ip_address = record_set[1];
+                const page = record_set[0] as string;
+                const ip_address = record_set[1] as string;
     
                 // Record overall page views and unique views.
                 let existing_page = temp_data[page];  
@@ -61,7 +72,7 @@ const parseLog = (new_state, data) => {
     const unique_views = new_state[1];
 
     // Populate page view and unique view data.
-    Object.keys(temp_data).forEach((d) => {
+    Object.keys(temp_data).forEach((d) => {       
         page_views.key_values[d] = temp_data[d].views;
         unique_views.key_values[d] = temp_data[d].unique.length;        
     });
@@ -75,31 +86,31 @@ const parseLog = (new_state, data) => {
     unique_views.views_total = calculateTotalViews(unique_views.key_values);
 
     // Add stats.
-    page_views.stats.page_views.val = page_views.views_total;
-    page_views.stats.total_pages.val = Object.keys(temp_data).length;                          
-    unique_views.stats.unique_views.val = unique_views.views_total;
-    unique_views.stats.unique_users.val = temp_users.length;
+    page_views.stats[0].val = page_views.views_total;
+    page_views.stats[1].val = Object.keys(temp_data).length;                          
+    unique_views.stats[0].val = unique_views.views_total;
+    unique_views.stats[1].val = temp_users.length;
 
     return new_state;
 };
 
 // Update unique page view count.
-const updateUniqueCount = (unique, ip_address) => {
+const updateUniqueCount = (unique:Array<string>, ip_address:string):Array<string> => {
     
     if (unique.indexOf(ip_address) === -1) unique.push(ip_address);    
     return unique;
 };
 
 // Sort view data.
-const sortData = (data, desc) => {
-
-    let tuples = [];
-    for (const key in data) tuples.push([key, data[key]]);
+const sortData = (data:KeyValues, desc:boolean):KeyValues => {
+    
+    let tuples:Array<{key:string, val:string|number}> = [];
+    for (const key in data) tuples.push({key, val: data[key]});
 
     tuples.sort((a, b) => {
-        a = a[1];
-        b = b[1];
-        return a < b ? -1 : (a > b ? 1 : 0);
+        let av = a.val;
+        let bv = b.val;
+        return av < bv ? -1 : (av > bv ? 1 : 0);
     });
 
     // Reverse order if necessary.
@@ -107,24 +118,26 @@ const sortData = (data, desc) => {
         tuples.reverse();
     }
 
-    let sorted_data = [];
+    let sorted_data:KeyValues = {};
     for (var i = 0; i < tuples.length; i++) {    
-        sorted_data[tuples[i][0]] = tuples[i][1];
+        sorted_data[tuples[i].key] = tuples[i].val;
     }
-    
+        
     return sorted_data;
 };
 
 // Calculate the views total.
-const calculateTotalViews = (data) => {
+const calculateTotalViews = (data:KeyValues):number => {
 
-    return Object.values(data).reduce((total, num) => {
+    const vals:Array<number> = Object.values(data)
+                                     .map((i => parseInt(i as string)));    
+    return vals.reduce((total:number, num:number) => {
         return total + num;
-    }, 0);
+    }, 0);    
 };
 
 // Update sort by view count.
-const sortByViewCount = (new_state, index) => {
+const sortByViewCount = (new_state:Array<PageType>, index:number) => {
     
     let page = new_state[index];
     let sort_desc = !page.sort_desc;

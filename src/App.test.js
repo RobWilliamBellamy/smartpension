@@ -8,8 +8,8 @@ import App from './App';
 import { parseLog, sortData } from './PageViewsReducer';
 import PageViews from './PageViews';
 
-import { initial_state } from './configs/store.js';
-import { config } from './configs/config.js';
+import initial_state from './configs/store';
+import { config } from './configs/config';
 
 const mockStore = configureStore([]);
 configure({ adapter: new Adapter() });

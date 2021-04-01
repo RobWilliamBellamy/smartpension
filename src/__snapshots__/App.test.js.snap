@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test React App Renders PageViews correctly 1`] = `
+<div>
+  <h1>
+    <i
+      aria-hidden="true"
+      className="file outline icon"
+      onClick={[Function]}
+    />
+    Page Views
+  </h1>
+  <p>
+    Displays page views, change sort order by 
+                clicking on the column header
+  </p>
+  <table
+    className="ui celled sortable striped table"
+  >
+    <thead
+      className=""
+    >
+      <tr
+        className=""
+      >
+        <th
+          className=""
+        >
+          Page
+        </th>
+        <th
+          className="descending sorted"
+          onClick={[Function]}
+        >
+          Views
+        </th>
+      </tr>
+    </thead>
+    <tbody
+      className=""
+    />
+    <tfoot
+      className=""
+    >
+      <tr
+        className=""
+      >
+        <th
+          className=""
+        >
+          <b>
+            Total:
+          </b>
+        </th>
+        <th
+          className=""
+        >
+          <b>
+            0
+          </b>
+        </th>
+      </tr>
+    </tfoot>
+  </table>
+  <div
+    className="ui segment"
+  >
+    <div
+      className="ui three column grid"
+    >
+      <div
+        className="row"
+      >
+        <div
+          className="four wide column"
+        >
+          <div
+            className="VictoryContainer"
+            style={
+              Object {
+                "height": "100%",
+                "pointerEvents": "none",
+                "position": "relative",
+                "touchAction": "none",
+                "width": "100%",
+              }
+            }
+          >
+            <svg
+              height={350}
+              role="img"
+              style={
+                Object {
+                  "height": "100%",
+                  "pointerEvents": "all",
+                  "width": "100%",
+                }
+              }
+              viewBox="0 0 350 350"
+              width={350}
+            >
+              <g />
+            </svg>
+            <div
+              style={
+                Object {
+                  "height": "100%",
+                  "left": 0,
+                  "position": "absolute",
+                  "top": 0,
+                  "width": "100%",
+                  "zIndex": 99,
+                }
+              }
+            >
+              <svg
+                height={350}
+                style={
+                  Object {
+                    "height": "100%",
+                    "overflow": "visible",
+                    "width": "100%",
+                  }
+                }
+                viewBox="0 0 350 350"
+                width={350}
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          className="two wide column"
+        />
+        <div
+          className="middle aligned ten wide column"
+        >
+          <div
+            className="ui small two statistics"
+            name="statistics_page_views"
+          >
+            <div
+              className="ui left floated horizontal statistic"
+            >
+              <div
+                className="value"
+              >
+                <i
+                  aria-hidden="true"
+                  className="eye icon"
+                  onClick={[Function]}
+                />
+                 
+                0
+              </div>
+              <div
+                className="label"
+              >
+                Total Page Views
+              </div>
+            </div>
+            <div
+              className="ui left floated horizontal statistic"
+            >
+              <div
+                className="value"
+              >
+                <i
+                  aria-hidden="true"
+                  className="sitemap icon"
+                  onClick={[Function]}
+                />
+                 
+                0
+              </div>
+              <div
+                className="label"
+              >
+                Total Pages
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

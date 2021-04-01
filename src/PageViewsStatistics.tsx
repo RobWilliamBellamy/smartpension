@@ -1,11 +1,14 @@
 import { Statistic, Icon } from 'semantic-ui-react';
 
+import { PageViewsStatisticsType } from './types/PageViewsStatisticsType';
+import { StatType } from './types/PageType';
+
 /**
  * PageViewsStatistics
  * @param {*} props 
  * @returns statistics
  */
- const PageViewsStatistics = (props) => {
+ const PageViewsStatistics = (props:PageViewsStatisticsType) => {
 
     return (<Statistic.Group name={ `statistics_${props.name}` }
                              widths='two'
@@ -19,7 +22,7 @@ import { Statistic, Icon } from 'semantic-ui-react';
  * @param {*} stats 
  * @returns statistics
  */
-const renderStatistics = (stats) => {
+const renderStatistics = (stats:Array<StatType>) => {
 
     const stat_entries = [];
     for (const key in stats) {

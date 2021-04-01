@@ -1,4 +1,6 @@
-export const initial_state = [
+import { PageType } from './../types/PageType';
+
+const store:Array<PageType> = [
     {
         tab: {
             id: 'page_views',
@@ -7,12 +9,12 @@ export const initial_state = [
             sub_title: `Displays page views, change sort order by 
                 clicking on the column header`
         },
-        stats: {
-            page_views: { label: 'Total Page Views', icon: 'eye', val: 0 },
-            total_pages: { label: 'Total Pages', icon: 'sitemap', val: 0 }
-        },
+        stats: [
+            { label: 'Total Page Views', icon: 'eye', val: 0 },
+            { label: 'Total Pages', icon: 'sitemap', val: 0 }
+        ],
         sort_desc: true,            
-        key_values: [],
+        key_values: {},
         views_total: 0
     },
     {
@@ -23,12 +25,14 @@ export const initial_state = [
             sub_title: `Displays unique page views, change sort order by 
                 clicking on the column header`            
         },
-        stats: {
-            unique_views: { label: 'Total Unique Views', icon: 'eye', val: 0 },
-            unique_users: { label: 'Total Unique Users', icon: 'user', val: 0 }
-        },
+        stats: [
+            { label: 'Total Unique Views', icon: 'eye', val: 0 },
+            { label: 'Total Unique Users', icon: 'user', val: 0 }
+        ],
         sort_desc: true,             
-        key_values: [],
+        key_values: {},
         views_total: 0
     }
 ];
+
+export default store;

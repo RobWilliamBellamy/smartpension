@@ -1,11 +1,13 @@
 import { Table } from 'semantic-ui-react';
 
+import { PageViewsTablePropsType, PageViewsTableColType } from './types/PageViewsTablePropsType';
+
 /**
  * PageViewsTable
  * @param {*} props 
  * @returns table
  */
-const PageViewsTable = (props) => {
+const PageViewsTable = (props:PageViewsTablePropsType) => {
     
     return (
         <Table sortable celled striped key={ `table_${ props.name }` }>
@@ -31,7 +33,7 @@ const PageViewsTable = (props) => {
  * @param {*} cols 
  * @returns table headers
  */
-const renderTableHeaders = (name, cols) => {
+const renderTableHeaders = (name:string, cols:Array<PageViewsTableColType>) => {
 
     let headers = [];
     for (const col of cols) {
@@ -43,7 +45,7 @@ const renderTableHeaders = (name, cols) => {
                 <Table.HeaderCell
                     key={ key }
                     sorted={ (col.desc) ? 'descending' : 'ascending' }
-                    onClick={() => col.sort() } >
+                    onClick={() => { if (col.sort) col.sort() }} >
                     { col.text }
                 </Table.HeaderCell>
             );
@@ -62,7 +64,7 @@ const renderTableHeaders = (name, cols) => {
  * @param {*} data 
  * @returns table rows
  */
-const renderTableRows = (name, data) => {
+const renderTableRows = (name:string, data:Array<any>) => {
     
     let content = [];
     for (const i in data[0]) { 
@@ -83,7 +85,7 @@ const renderTableRows = (name, data) => {
  * @param {*} row 
  * @returns table columns
  */
-const renderTableCols = (name, data, row) => {
+const renderTableCols = (name:string, data:Array<string>, row:any) => {
 
     let content = [];
     for (const col in data) { 
@@ -103,7 +105,7 @@ const renderTableCols = (name, data, row) => {
  * @param {*} cols 
  * @returns table footer
  */
-const renderFooter = (name, cols) => {
+const renderFooter = (name:string, cols:Array<string>) => {
     
     let footer = [];
     for (const i in cols) { 

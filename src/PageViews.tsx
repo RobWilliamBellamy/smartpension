@@ -5,6 +5,9 @@ import PageViewsTable from './PageViewsTable';
 import PageViewsChart from './PageViewsChart';
 import PageViewsStatistics from './PageViewsStatistics';
 
+import { PageType } from './types/PageType';
+import { PageViewsPropType } from './types/PageViewsPropsType';
+
 import './css/WebPageViews.css';
 
 /**
@@ -13,10 +16,9 @@ import './css/WebPageViews.css';
  * various statistics below.
  * @returns view
  */
-const PageViews = (props) => {
+const PageViews = (props:PageViewsPropType) => {
     
-    const page = props.pages[props.index];
-
+    const page = props.pages[parseInt(props.index)];
     return (<div>  
                 <h1><Icon name='file outline' />{ page.tab.content }</h1>
                 <p>{ page.tab.sub_title }</p>
@@ -55,7 +57,7 @@ const PageViews = (props) => {
  * @param {*} state 
  * @returns 
  */
-const mapStateToProps = state => ({
+const mapStateToProps = (state:Array<PageType>) => ({
     pages: state
 });
 
