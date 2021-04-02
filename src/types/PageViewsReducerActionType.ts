@@ -1,4 +1,4 @@
 export type PageViewsReducerActionType = {
     type:string,
-    data:any
+    data:string|number
 };

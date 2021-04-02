@@ -18,7 +18,7 @@ import 'semantic-ui-css/semantic.min.css';
  * @param {*} pages
  * @returns tabs
  */
- const defineTabs = (pages:Array<PageType>):Array<any> => {
+ const defineTabs = (pages:Array<PageType>):any[] => {
         
     let panes:Array<any> = [];        
     for(const i in pages) {

@@ -105,7 +105,7 @@ const renderTableCols = (name:string, data:Array<string>, row:any) => {
  * @param {*} cols 
  * @returns table footer
  */
-const renderFooter = (name:string, cols:Array<string>) => {
+const renderFooter = (name:string, cols:Array<string|number>) => {
     
     let footer = [];
     for (const i in cols) { 

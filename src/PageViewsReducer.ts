@@ -10,9 +10,9 @@ const pageViewsReducer = (state:Array<PageType> = initial_state , action:PageVie
     let new_state = Object.assign({}, state);
     switch (action.type) {
         case 'PROCESS_WEB_SERVER_LOG':             
-            return parseLog(new_state, action.data);
+            return parseLog(new_state, action.data as string);
         case 'SORT_BY_VIEWS':            
-            return sortByViewCount(new_state, action.data);  
+            return sortByViewCount(new_state, action.data as number);  
         default:
             return state;
     }

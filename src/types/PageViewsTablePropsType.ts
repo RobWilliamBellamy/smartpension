@@ -1,12 +1,12 @@
 export type PageViewsTablePropsType = {
     name:string,
     cols:Array<PageViewsTableColType>,
-    data:Array<any[]>,
-    footer:Array<any>,
+    data:Array<Array<string|number>>,
+    footer:Array<string|number>,
 };
 
 export type PageViewsTableColType = {
     text:string,
     desc?:boolean,
-    sort?: ()=> void
+    sort?: () => void
 };

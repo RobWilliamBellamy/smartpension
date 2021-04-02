@@ -84,7 +84,7 @@ const FileLoader = (props:FileLoaderPropsType) => {
                                           id="file"
                                           placeholder={ props.placeHolder }
                                           value={ (filesContent.length > 0) ? 
-                                                filesContent[0].name : ''}
+                                                   filesContent[0].name : ''}
                                           width={16}
                               />
                          </Form.Group>
