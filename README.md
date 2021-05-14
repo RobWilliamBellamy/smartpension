@@ -6,7 +6,7 @@ This README documents whatever steps are necessary to get the application up and
 
 * Smart Pension.
 * FE Engineer Test
-* 1.0.0
+* 1.0.1
 
 ### How do I get set up? ###
 
